@@ -9,8 +9,8 @@ class LinkedIn(Parent):
     SUMMARY_XPATH = ".//p[contains(@class, 'snippet')]"
     NEXT_XPATH = "//button[@class='see-more-jobs']"
     LINK_XPATH = ".//a[contains(@class, 'base-card__full-link')]"
-    URL = "https://www.linkedin.com/jobs/search?keywords=Software%20Engineer&location=Denver%2BMetropolitan%2BArea" \
-          "&trk=public_jobs_jobs-search-bar_search-submit&f_TP=1&redirect=false&position=1&pageNum=0&f_TPR=r86400"
+    URL = "https://www.linkedin.com/jobs/search/?f_TPR=r86400&geoId=90000034&keywords=Software%20Engineer&location=" \
+          "Denver%20Metropolitan%20Area"
     SOURCE = "LinkedIn"
 
     def advance_results(self):
