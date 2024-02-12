@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 
 class JobBase(Parent):
     # DB constants
-    SERVER_NAME = "EL-COMPUTACABRA"
+    SERVER_NAME = "Macetop\\SQLEXPRESS"
     DATABASE_NAME = "MasonDB"
     SCRIPT = '''INSERT INTO dbo.JobSearchResults ([id], [JobTitle], [Company], [Location], [Summary], [Link], [Source], [Date])
         VALUES'''
@@ -34,7 +34,6 @@ class JobBase(Parent):
     locations = []
     summaries = []
     links = []
-    'https://www.indeed.com/rc/clk?jk=992599f6c72fb5b6&fccid=5be5cf4956979448&vjs=3'
 
 
     def get_results_new(self, linkXpath):
@@ -118,7 +117,6 @@ class JobBase(Parent):
         db_cursor.execute(self.DUPLICATES)
         db_cursor.execute(self.BLACKLIST.replace("@BLType@", "Company"))
         db_cursor.execute(self.BLACKLIST.replace("@BLType@", "JobTitle"))
-        db_cursor.execute(self.BLACKLIST.replace("@BLType@", "Location"))
         conn.commit()
 
     def write_to_db(self):
@@ -154,5 +152,4 @@ class JobBase(Parent):
         db_cursor.execute(self.DUPLICATES)
         db_cursor.execute(self.BLACKLIST.replace("@BLType@", "Company"))
         db_cursor.execute(self.BLACKLIST.replace("@BLType@", "JobTitle"))
-        db_cursor.execute(self.BLACKLIST.replace("@BLType@", "Location"))
         conn.commit()
