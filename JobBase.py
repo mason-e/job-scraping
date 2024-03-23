@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 
 class JobBase(Parent):
     # DB constants
-    SERVER_NAME = "Macetop\\SQLEXPRESS"
+    SERVER_NAME = "Macetop"
     DATABASE_NAME = "MasonDB"
     SCRIPT = '''INSERT INTO dbo.JobSearchResults ([id], [JobTitle], [Company], [Location], [Summary], [Link], [Source], [Date])
         VALUES'''
