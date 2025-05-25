@@ -44,6 +44,7 @@ class ScraperBase:
         return False
 
     def scroll_results(self):
+        webdriver.ActionChains(self.browser).send_keys(Keys.ESCAPE).perform()  # in case of pop-ups
         latest_height = self.browser.execute_script("return document.body.scrollHeight")
 
         while True:
