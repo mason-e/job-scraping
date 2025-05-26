@@ -44,7 +44,9 @@ class ScraperBase:
         return False
 
     def scroll_results(self):
+        self.delay(2)
         webdriver.ActionChains(self.browser).send_keys(Keys.ESCAPE).perform()  # in case of pop-ups
+        self.delay(1)
         latest_height = self.browser.execute_script("return document.body.scrollHeight")
 
         while True:
@@ -84,6 +86,8 @@ class ScraperBase:
     def loop_results(self, result_xpath, method):
         results = self.browser.find_elements(By.XPATH, result_xpath)
         result_list = []
+        if not results:
+            result_list.append("Unknown")
         for result in results:
             text = method(result)
             if text != "":

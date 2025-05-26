@@ -8,9 +8,9 @@ class JobBase(Parent):
     # DB constants
     SERVER_NAME = "Macetop"
     DATABASE_NAME = "MasonDB"
-    SCRIPT = '''INSERT INTO dbo.JobSearchResults ([id], [JobTitle], [Company], [Location], [Link], [Source], [Date])
+    SCRIPT = '''INSERT INTO dbo.JobSearchResults ([JobTitle], [Company], [Location], [Link], [Source], [Date])
         VALUES'''
-    SCRIPT_VALUES = "(@id@, '@Title@', '@Company@', '@Location@', '@Link@', '@Source@', GETDATE())"
+    SCRIPT_VALUES = "('@Title@', '@Company@', '@Location@', '@Link@', '@Source@', GETDATE())"
     BLACKLIST = '''DELETE T1
         FROM dbo.JobSearchResults AS T1
         INNER JOIN dbo.Blacklist@BLType@ As T2
@@ -55,10 +55,17 @@ class JobBase(Parent):
     def get_results(self):
         self.titles += self.get_text_results(self.TITLE_XPATH)
         self.companies += self.get_text_results(self.COMPANY_XPATH)
-        self.locations += self.get_text_results(self.LOCATION_XPATH)
+        # self.locations += self.get_text_results(self.LOCATION_XPATH)
         self.links += self.get_link_results(self.TITLE_XPATH)
-        if self.click_next(self.NEXT_XPATH):
-            self.get_results()
+        for title in self.titles:
+            self.locations.append("Unknown")
+        # if self.click_next(self.NEXT_XPATH):
+        #     self.get_results()
+
+    def make_entries(self):
+        if self.validate_results():
+            for (title, company, location, link) in zip(self.titles, self.companies, self.locations, self.links):
+                self.entries.append(JobEntry(title, company, location, link))
 
     def validate_results(self):
         validation = len(self.titles) == len(self.companies) and \
@@ -82,21 +89,14 @@ class JobBase(Parent):
     def write_to_db(self):
         conn = self.connect_db()
         db_cursor = conn.cursor()
-        db_cursor.execute("SELECT MAX([id]) FROM dbo.JobSearchResults")
-        i = db_cursor.fetchone()[0]
         script = self.SCRIPT
-        if not isinstance(i, int):
-            i = 0
         first_entry = True
 
         for entry in self.entries:
-            i += 1
-
             if not first_entry:
                 script += ", \n"
 
-            script += self.SCRIPT_VALUES.replace("@id@", i.__str__())\
-                .replace("@Title@", entry.title.replace("'", "''"))\
+            script += self.SCRIPT_VALUES.replace("@Title@", entry.title.replace("'", "''"))\
                 .replace("@Company@", entry.company.replace("'", "''"))\
                 .replace("@Location@", entry.location.replace("'", "''"))\
                 .replace("@Link@", entry.link.replace("'", "''"))\
