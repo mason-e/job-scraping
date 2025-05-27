@@ -2,7 +2,7 @@ from selenium import webdriver
 import random
 from time import sleep
 
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
@@ -37,13 +37,20 @@ class ScraperBase:
         if self.is_present(next_xpath):
             next_button = self.browser.find_element(By.XPATH, next_xpath)
             self.delay(2)
-            next_button.click()
+            try:
+                next_button.click()
+            except ElementClickInterceptedException:
+                # sometimes the element is there but fails to click - catch exception
+                # so we can at least get up to current page of results; this also helps if
+                # the site disables the button on the last page rather than remove it
+                return False
             self.delay(2)
             webdriver.ActionChains(self.browser).send_keys(Keys.ESCAPE).perform()  # in case of pop-ups
             return True
         return False
 
     def scroll_results(self):
+        # for scrolling results rather than paginated - scroll to bottom until it stops loading more results
         self.delay(2)
         webdriver.ActionChains(self.browser).send_keys(Keys.ESCAPE).perform()  # in case of pop-ups
         self.delay(1)
@@ -58,7 +65,7 @@ class ScraperBase:
             latest_height = new_height
 
     def get_text_results(self, result_xpath):
-        return self.loop_results(result_xpath, self.get_text)
+        return self.get_all_results(result_xpath, self.get_text)
 
     def get_text_with_validation(self, parent_element, result_xpath):
         try:
@@ -81,13 +88,11 @@ class ScraperBase:
             return self.get_link(element)
 
     def get_link_results(self, result_xpath):
-        return self.loop_results(result_xpath, self.get_link)
+        return self.get_all_results(result_xpath, self.get_link)
 
-    def loop_results(self, result_xpath, method):
+    def get_all_results(self, result_xpath, method):
         results = self.browser.find_elements(By.XPATH, result_xpath)
         result_list = []
-        if not results:
-            result_list.append("Unknown")
         for result in results:
             text = method(result)
             if text != "":

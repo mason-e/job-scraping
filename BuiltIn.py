@@ -13,8 +13,6 @@ class BuiltIn(Parent):
 
 
 builtIn = BuiltIn(BuiltIn.URL)
-
-builtIn.get_results()
+builtIn.get_results_mixed()
 builtIn.make_entries()
-
 builtIn.write_to_db()
