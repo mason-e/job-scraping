@@ -1,23 +1,10 @@
-from JobEntry import JobEntry
-from ScraperBase import ScraperBase as Parent
-import pyodbc
+from helpers.job_entry import JobEntry
+from helpers import sql_helper
+from helpers.scraper_base import ScraperBase as Parent
 from selenium.webdriver.common.by import By
 
 
 class JobBase(Parent):
-    # DB constants
-    SERVER_NAME = "Macetop"
-    DATABASE_NAME = "MasonDB"
-    SCRIPT = '''INSERT INTO dbo.JobSearchResults ([JobTitle], [Company], [Location], [Link], [Source], [Date])
-        VALUES'''
-    SCRIPT_VALUES = "('@Title@', '@Company@', '@Location@', '@Link@', '@Source@', GETDATE())"
-    BLACKLIST = '''DELETE T1
-        FROM dbo.JobSearchResults AS T1
-        INNER JOIN dbo.Blacklist@BLType@ As T2
-        ON T1.[@BLType@] LIKE '%' + T2.[@BLType@] + '%' '''
-    DUPLICATES = '''WITH CTE AS (SELECT [Company], [JobTitle], [Date], RN = 
-        ROW_NUMBER() OVER(PARTITION BY [Company], [JobTitle] ORDER BY [Date] ASC) FROM [JobSearchResults])
-        DELETE FROM CTE WHERE RN > 1;'''
     # constants to be defined by implementations of this class for a specific site
     RESULT_XPATH = ""
     TITLE_XPATH = ""
@@ -53,9 +40,10 @@ class JobBase(Parent):
         self.companies += self.get_text_results(self.COMPANY_XPATH)
         self.locations += self.get_text_results(self.LOCATION_XPATH)
         self.links += self.get_link_results(self.TITLE_XPATH)
-        self.correct_mixed_results()
         if self.click_next(self.NEXT_XPATH):
             self.get_results_mixed()
+        else:
+            self.correct_mixed_results()
 
     def correct_mixed_results(self):
         # used when one data point can't be found in a mixed result - fill in with "unknown"
@@ -94,32 +82,6 @@ class JobBase(Parent):
 
         return validation
 
-    def connect_db(self):
-        return pyodbc.connect("Driver={SQL Server};"
-                              "Server=" + self.SERVER_NAME + ";"
-                              "Database=" + self.DATABASE_NAME + ";"
-                              "Trusted_Connection=yes;")
-
     def write_to_db(self):
-        conn = self.connect_db()
-        db_cursor = conn.cursor()
-        script = self.SCRIPT
-        first_entry = True
-
-        for entry in self.entries:
-            if not first_entry:
-                script += ", \n"
-
-            script += self.SCRIPT_VALUES.replace("@Title@", entry.title.replace("'", "''"))\
-                .replace("@Company@", entry.company.replace("'", "''"))\
-                .replace("@Location@", entry.location.replace("'", "''"))\
-                .replace("@Link@", entry.link.replace("'", "''"))\
-                .replace("@Source@", self.SOURCE)
-
-            first_entry = False
-
-        db_cursor.execute(script)
-        db_cursor.execute(self.DUPLICATES)
-        db_cursor.execute(self.BLACKLIST.replace("@BLType@", "Company"))
-        db_cursor.execute(self.BLACKLIST.replace("@BLType@", "JobTitle"))
-        conn.commit()
+        database = sql_helper.SqlDB()
+        database.write_to_db(self.entries, self.SOURCE)

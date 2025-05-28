@@ -4,8 +4,3 @@ class JobEntry:
         self.company = company
         self.location = location
         self.link = link
-
-    #title = ''
-    #company = ''
-    #location = ''
-    #link = ''
