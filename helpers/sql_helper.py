@@ -4,16 +4,9 @@ class SqlDB():
     # DB constants
     SERVER_NAME = "Macetop"
     DATABASE_NAME = "MasonDB"
-    SCRIPT = '''INSERT INTO dbo.JobSearchResults ([JobTitle], [Company], [Location], [Link], [Source], [Date])
+    CLEANUP_PATH = "./remove_unwanted.sql"
+    SCRIPT_PREFIX = '''INSERT INTO dbo.JobSearchResults ([JobTitle], [Company], [Location], [Link], [Source], [Date])
         VALUES'''
-    SCRIPT_VALUES = "('@Title@', '@Company@', '@Location@', '@Link@', '@Source@', GETDATE())"
-    BLACKLIST = '''DELETE T1
-        FROM dbo.JobSearchResults AS T1
-        INNER JOIN dbo.Blacklist@BLType@ As T2
-        ON T1.[@BLType@] LIKE '%' + T2.[@BLType@] + '%' '''
-    DUPLICATES = '''WITH CTE AS (SELECT [Company], [JobTitle], [Date], RN = 
-        ROW_NUMBER() OVER(PARTITION BY [Company], [JobTitle] ORDER BY [Date] ASC) FROM [JobSearchResults])
-        DELETE FROM CTE WHERE RN > 1;'''
     
     def connect_db(self):
         return pyodbc.connect("Driver={SQL Server};"
@@ -25,28 +18,23 @@ class SqlDB():
         conn = self.connect_db()
         try:
             db_cursor = conn.cursor()
-            script = self.SCRIPT
-            first_entry = True
+            script = self.SCRIPT_PREFIX
 
             for entry in entries:
-                if not first_entry:
-                    script += ", \n"
+                script +=  f"('{entry.title}', '{entry.company}', '{entry.location}', '{entry.link}', '{source}', GETDATE()),\n"
 
-                script += self.SCRIPT_VALUES.replace("@Title@", entry.title.replace("'", "''"))\
-                    .replace("@Company@", entry.company.replace("'", "''"))\
-                    .replace("@Location@", entry.location.replace("'", "''"))\
-                    .replace("@Link@", entry.link.replace("'", "''"))\
-                    .replace("@Source@", source)
-
-                first_entry = False
+            # remove last comma from final entry
+            script = script[:-2]
 
             db_cursor.execute(script)
-            db_cursor.execute(self.DUPLICATES)
-            db_cursor.execute(self.BLACKLIST.replace("@BLType@", "Company"))
-            db_cursor.execute(self.BLACKLIST.replace("@BLType@", "JobTitle"))
+            # clean up unwanted entries
+            with open(self.CLEANUP_PATH) as f:
+                db_cursor.execute(f.read())
             conn.commit()
-        except Exception:
+        except Exception as error:
+            # always attempt to close the connection even if something fails here
             conn.close()
+            raise error
         conn.close()
 
     
