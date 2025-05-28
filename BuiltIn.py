@@ -1,4 +1,4 @@
-from JobBase import JobBase as Parent
+from helpers.job_base import JobBase as Parent
 
 
 class BuiltIn(Parent):

@@ -26,7 +26,7 @@ Possible future work may add ability to write to a JSON file to make this more f
 
 ## Usage
 
-Run one of the scripts that is named for a job board site, not the base class scripts. The basic flow of a script is as follows:
+Run one of the scripts in the root of the repo, named for the job board. The basic flow of a script is as follows:
 
 1. Load a job board with past day of results
 2. Collect results in an object:
