@@ -1,5 +1,5 @@
 from helpers.job_entry import JobEntry
-from helpers import sql_helper
+from helpers import query_helper, sql_helper
 from helpers.scraper_base import ScraperBase as Parent
 from selenium.webdriver.common.by import By
 
@@ -84,4 +84,7 @@ class JobBase(Parent):
 
     def write_to_db(self):
         database = sql_helper.SqlDB()
-        database.write_to_db(self.entries, self.SOURCE)
+        queries = query_helper.QueryHelper()
+        script = queries.make_create_script(self.entries, self.SOURCE)
+        database.execute_script(script)
+        database.execute_cleanup()
