@@ -1,4 +1,4 @@
-from JobBase import JobBase as Parent
+from helpers.job_base import JobBase as Parent
 
 
 class BuiltIn(Parent):
@@ -8,13 +8,11 @@ class BuiltIn(Parent):
     COMPANY_XPATH = "//a[@data-id='company-title']"
     LOCATION_XPATH = "unknown" # location selectors are too generic to use
     NEXT_XPATH = "//i[contains(@class, 'fa-chevron-right')]//parent::a"
-    URL = "https://www.builtincolorado.com/jobs/remote/hybrid/office/dev-engineering?search=software+engineer&daysSinceUpdated=7&state=Colorado&country=USA&allLocations=true"
+    URL = "https://www.builtincolorado.com/jobs/remote/hybrid/office/dev-engineering?search=software+engineer&daysSinceUpdated=1&state=Colorado&country=USA&allLocations=true"
     SOURCE = "BuiltInColorado"
 
 
 builtIn = BuiltIn(BuiltIn.URL)
-
-builtIn.get_results()
+builtIn.get_results_mixed()
 builtIn.make_entries()
-
 builtIn.write_to_db()
