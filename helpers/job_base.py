@@ -84,7 +84,7 @@ class JobBase(Parent):
 
     def write_to_db(self):
         database = sql_helper.SqlDB()
-        queries = query_helper.QueryHelper()
+        queries = query_helper.QueryHelpers()
         script = queries.make_create_script(self.entries, self.SOURCE)
         database.execute_script(script)
         database.execute_cleanup()
