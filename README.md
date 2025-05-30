@@ -8,17 +8,19 @@ This repository uses the Selenium Chrome web driver in Python to scrape job boar
 
 Known working version is Python 3.12, but likely compatible with others.
 
+1. Download from python.org
+2. Create venv from repo root directory: `python -m venv venv`
+3. `pip install selenium` and `pip install pyodbc` for needed dependencies
+
 ### Selenium
 
-Use `pip` to install `selenium` dependency in code. The chromedriver executable is currently manually downloaded and placed in the root of this repo when a new version is available, from this site:
+The chromedriver executable is currently manually downloaded and placed in the root of this repo when a new version is available, from this site:
 
 https://googlechromelabs.github.io/chrome-for-testing/
 
 ### Database
 
 The DB scripts are based on MSSQL (SQL Server). It should work with other SQL varieties with some syntax changes. The server and database name would also need to be changed no matter what since they are specific to my machine. The `create_table.sql` script included in this repo shows the schema used.
-
-Use `pip` to install the `pyodbc` dependency.
 
 The `write_to_db()` method does not need to actually run to demonstrate the read ability of the scraper, just the write. 
 
@@ -45,3 +47,7 @@ Here are the sites it scrapes so far:
 
 #### Indeed
 Stopped functioning once I started running into "verify you are human" checks.
+
+## Testing
+
+Add pytest with `pip install pytest`. Run a file with `_test` in the name with the command `pytest /path/to/file_test.py`
