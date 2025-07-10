@@ -36,6 +36,7 @@ class ScraperBase:
         self.delay(1)
         if self.is_present(next_xpath):
             next_button = self.browser.find_element(By.XPATH, next_xpath)
+            self.browser.execute_script("arguments[0].scrollIntoView({block: 'center'});", next_button)
             self.delay(2)
             try:
                 next_button.click()
