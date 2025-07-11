@@ -12,7 +12,8 @@ class BuiltIn(Parent):
     SOURCE = "BuiltInColorado"
 
 
-builtIn = BuiltIn(BuiltIn.URL)
+builtIn = BuiltIn()
+builtIn.load_job_url()
 builtIn.get_results_mixed()
 builtIn.make_entries()
 builtIn.write_to_db()
