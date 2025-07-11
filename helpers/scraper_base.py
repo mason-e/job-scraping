@@ -10,16 +10,24 @@ from selenium.webdriver.common.by import By
 class ScraperBase:
     browser = webdriver.Chrome()
 
-    def __init__(self, url):
+    def __init__(self):
         self.browser.maximize_window()
-        self.browser.get(url)
 
     def __del__(self):
         self.browser.close()
 
+    def load_page(self, url):
+        self.browser.get(url)
+
     def delay(self, seconds):
         seconds += random.randint(0, 2)
         sleep(seconds)
+
+    def complete_auth(self, username, password, user_xpath, pass_xpath, submit_xpath):
+        self.browser.find_element(By.XPATH, user_xpath).send_keys(username)
+        self.browser.find_element(By.XPATH, pass_xpath).send_keys(password)
+        self.browser.find_element(By.XPATH, submit_xpath).click()
+        self.delay(2)
 
     def get_text(self, element):
         text = element.text
