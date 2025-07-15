@@ -94,7 +94,8 @@ class ScraperBase:
         except NoSuchElementException:
             return ''
         if element:
-            return self.get_link(element)
+            # split off if there is a ? in the link since it is usually unnecessary afterwards
+            return self.get_link(element).split('?', 1)[0]
 
     def get_link_results(self, result_xpath):
         return self.get_all_results(result_xpath, self.get_link)

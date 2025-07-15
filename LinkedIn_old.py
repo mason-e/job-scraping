@@ -13,7 +13,8 @@ class LinkedIn(Parent):
     URL = "https://www.linkedin.com/jobs/search/?f_TPR=r86400&geoId=90000034&keywords=Software%20Engineer&location=Denver%20Metropolitan%20Area"
     SOURCE = "LinkedIn"
 
-linkedIn = LinkedIn(LinkedIn.URL)
+linkedIn = LinkedIn()
+linkedIn.load_job_url()
 linkedIn.scroll_results()
 linkedIn.get_results_by_card()
 linkedIn.write_to_db()
