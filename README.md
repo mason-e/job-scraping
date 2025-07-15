@@ -8,9 +8,17 @@ This repository uses the Selenium Chrome web driver in Python to scrape job boar
 
 Known working version is Python 3.12, but likely compatible with others.
 
+#### Windows
+
 1. Download from python.org
 2. Create venv from repo root directory: `python -m venv venv`
 3. `pip install selenium` and `pip install pyodbc` for needed dependencies
+
+#### Linux
+
+1. `apt install python3.12-venv`
+2. `apt install python3-pip` (not sure if this is actually necessary since next steps do not use `pip` on Linux)
+3. `apt install python3-selenium` and `apt install ptyhon3-pyodbc`
 
 ### Selenium
 
@@ -50,4 +58,4 @@ Stopped functioning once I started running into "verify you are human" checks.
 
 ## Testing
 
-Add pytest with `pip install pytest`. Run a file with `_test` in the name with the command `pytest /path/to/file_test.py`
+Add pytest with `pip install pytest` (Win) or `apt install python3-pytest` (Linux). Run a file with `_test` in the name with the command `pytest /path/to/file_test.py`
