@@ -3,12 +3,12 @@ from helpers.job_base import JobBase as Parent
 
 
 class LinkedIn(Parent):
-    RESULT_XPATH = "//div[contains(@class, 'base-card')]"
-    TITLE_XPATH = ".//h3[contains(@class, 'base-search-card')]"
-    COMPANY_XPATH = ".//h4[contains(@class, 'base-search-card')]"
-    LOCATION_XPATH = ".//span[contains(@class, 'location')]"
-    NEXT_XPATH = "//button[@class='see-more-jobs']"
-    LINK_XPATH = ".//a[contains(@class, 'base-card__full-link')]"
+    RESULT_XPATH = "//div[contains(@class, 'job-card-container relative job-card-list')]"
+    TITLE_XPATH = ".//div[contains(@class, 'lockup__title')]"
+    COMPANY_XPATH = ".//div[contains(@class, 'lockup__subtitle')]"
+    LOCATION_XPATH = ".//div[contains(@class, 'lockup__caption')]"
+    NEXT_XPATH = "//button[contains(@class, 'button--next')]"
+    LINK_XPATH = ".//a[contains(@class, 'container__link')]"
     URL = "https://www.linkedin.com/jobs/search/?f_TPR=r86400&geoId=90000034&keywords=Software%20Engineer&location=Denver%20Metropolitan%20Area"
     SOURCE = "LinkedIn"
     AUTH_URL = "https://www.linkedin.com/login"
