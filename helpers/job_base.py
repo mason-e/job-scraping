@@ -14,6 +14,13 @@ class JobBase(Parent):
     LINK_XPATH = ""
     URL = ""
     SOURCE = ""
+    # only need to be used if user authentication is required to see results
+    AUTH_URL = ""
+    AUTH_USER = ""
+    AUTH_PASS = ""
+    AUTH_USER_XPATH = ""
+    AUTH_PASS_XPATH = ""
+    AUTH_SUBMIT_XPATH = ""
     # lists for intermediate storage of results
     entries = []
     titles = []
@@ -21,6 +28,12 @@ class JobBase(Parent):
     locations = []
     links = []
 
+    def load_job_url(self):
+        self.load_page(self.URL)
+
+    def pre_authenticate(self):
+        self.load_page(self.AUTH_URL)
+        self.complete_auth(self.AUTH_USER, self.AUTH_PASS, self.AUTH_USER_XPATH, self.AUTH_PASS_XPATH, self.AUTH_SUBMIT_XPATH)
 
     def get_results_by_card(self):
         # method for getting all key info off of a single result "card" in the DOM
