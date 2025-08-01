@@ -6,7 +6,8 @@ class BuiltIn(Parent):
     LINK_XPATH = ".//a[@data-id='job-card-title']"
     TITLE_XPATH = ".//a[@data-id='job-card-title']"
     COMPANY_XPATH = ".//a[@data-id='company-title']"
-    LOCATION_XPATH = "unknown" # location selectors are too generic to use
+    # below is fragile, but works; get the text that's a "cousin" of the location pin image
+    LOCATION_XPATH = ".//i[contains(@class, 'fa-location-dot')]/../following-sibling::div/span"
     NEXT_XPATH = "//i[contains(@class, 'fa-chevron-right')]//parent::a"
     URL = "https://www.builtincolorado.com/jobs/remote/hybrid/office/dev-engineering?search=software+engineer&daysSinceUpdated=1&state=Colorado&country=USA&allLocations=true"
     SOURCE = "BuiltInColorado"
