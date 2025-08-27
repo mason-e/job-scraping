@@ -22,6 +22,5 @@ class LinkedIn(Parent):
 linkedIn = LinkedIn()
 linkedIn.pre_authenticate()
 linkedIn.load_job_url()
-linkedIn.scroll_results()
-linkedIn.get_results_by_card()
-linkedIn.write_to_db()
+linkedIn.get_results_by_card(True)
+linkedIn.cleanup_unwanted()
