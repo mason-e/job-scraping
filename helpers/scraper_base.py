@@ -2,7 +2,7 @@ from selenium import webdriver
 import random
 from time import sleep
 
-from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
+from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, StaleElementReferenceException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
@@ -52,6 +52,9 @@ class ScraperBase:
                 # sometimes the element is there but fails to click - catch exception
                 # so we can at least get up to current page of results; this also helps if
                 # the site disables the button on the last page rather than remove it
+                return False
+            except StaleElementReferenceException:
+                # another common exception - catch this so we can get up to current page of results
                 return False
             self.delay(2)
             webdriver.ActionChains(self.browser).send_keys(Keys.ESCAPE).perform()  # in case of pop-ups

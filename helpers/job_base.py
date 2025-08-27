@@ -35,8 +35,10 @@ class JobBase(Parent):
         self.load_page(self.AUTH_URL)
         self.complete_auth(self.AUTH_USER, self.AUTH_PASS, self.AUTH_USER_XPATH, self.AUTH_PASS_XPATH, self.AUTH_SUBMIT_XPATH)
 
-    def get_results_by_card(self):
-        # method for getting all key info off of a single result "card" in the DOM
+    def get_results_by_card(self, scroll = False):
+        # some sites don't load all results unless scrolled
+        if scroll:
+            self.scroll_results()
         results = self.browser.find_elements(By.XPATH, self.RESULT_XPATH)
         for result in results:
             title = self.get_text_with_validation(result, self.TITLE_XPATH)
@@ -44,7 +46,9 @@ class JobBase(Parent):
             location = self.get_text_with_validation(result, self.LOCATION_XPATH)
             link = self.get_link_with_validation(result, self.LINK_XPATH)
             self.entries.append(JobEntry(title, company, location, link))
+            self.write_to_db()
         if self.click_next(self.NEXT_XPATH):
+            self.entries = []
             self.get_results_by_card()
 
     def write_to_db(self):
@@ -52,4 +56,7 @@ class JobBase(Parent):
         queries = query_helper.QueryHelpers()
         script = queries.make_create_script(self.entries, self.SOURCE)
         database.execute_script(script)
+
+    def cleanup_unwanted(self):   
+        database = sql_helper.SqlDB()
         database.execute_cleanup()
