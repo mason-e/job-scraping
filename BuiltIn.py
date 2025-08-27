@@ -16,4 +16,4 @@ class BuiltIn(Parent):
 builtIn = BuiltIn()
 builtIn.load_job_url()
 builtIn.get_results_by_card()
-builtIn.write_to_db()
+builtIn.cleanup_unwanted()
