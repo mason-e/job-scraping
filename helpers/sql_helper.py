@@ -4,7 +4,7 @@ class SqlDB():
     # DB constants
     SERVER_NAME = "Macetop"
     DATABASE_NAME = "MasonDB"
-    CLEANUP_PATH = "./remove_unwanted.sql"
+    CLEANUP_PATH = "./sql/remove_unwanted.sql"
     
     def _connect_db(self):
         return pyodbc.connect("Driver={SQL Server};"
@@ -25,6 +25,9 @@ class SqlDB():
             conn.close()
             return result
         except Exception as error:
+            # log the script so it can be fixed and manually re-executed if desired
+            print("Failed to executed SQL script:")
+            print(script)
             # always attempt to close the connection even if something fails here
             conn.close()
             raise error 
