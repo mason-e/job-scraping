@@ -4,7 +4,7 @@ class SqlDB():
     # DB constants
     SERVER_NAME = "Macetop"
     DATABASE_NAME = "MasonDB"
-    CLEANUP_PATH = "./remove_unwanted.sql"
+    CLEANUP_PATH = "./sql/remove_unwanted.sql"
     
     def _connect_db(self):
         return pyodbc.connect("Driver={SQL Server};"
