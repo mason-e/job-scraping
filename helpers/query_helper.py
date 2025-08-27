@@ -5,7 +5,7 @@ class QueryHelpers():
         script = self.SCRIPT_PREFIX
 
         for entry in entries:
-            script +=  f"('{entry.title.replace("'", "''")}', '{entry.company.replace("'", "''")}', '{entry.location.replace("'", "''")}', '{entry.link.replace("'", "''")}', '{source}', GETDATE()),\n"
+            script +=  f"('{entry.title[0:200].replace("'", "''")}', '{entry.company[0:200].replace("'", "''")}', '{entry.location[0:100].replace("'", "''")}', '{entry.link[0:400].replace("'", "''")}', '{source}', GETDATE()),\n"
 
         # remove last comma from final entry
         return script[:-2]
