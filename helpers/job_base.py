@@ -42,20 +42,26 @@ class JobBase(Parent):
         results = self.browser.find_elements(By.XPATH, self.RESULT_XPATH)
         for result in results:
             title = self.get_text_with_validation(result, self.TITLE_XPATH)
+            # hacky fix for LinkedIn unwanted duplication and verification tag
+            if self.TITLE_XPATH == ".//div[contains(@class, 'lockup__title')]":
+                title = title.replace("with verification", "")
+                title_length = len(title) // 2
+                title = title[:title_length]
             company = self.get_text_with_validation(result, self.COMPANY_XPATH)
             location = self.get_text_with_validation(result, self.LOCATION_XPATH)
             link = self.get_link_with_validation(result, self.LINK_XPATH)
             self.entries.append(JobEntry(title, company, location, link))
-            self.write_to_db()
+        self.write_to_db()
         if self.click_next(self.NEXT_XPATH):
             self.entries = []
-            self.get_results_by_card()
+            self.get_results_by_card(scroll)
 
     def write_to_db(self):
         database = sql_helper.SqlDB()
         queries = query_helper.QueryHelpers()
         script = queries.make_create_script(self.entries, self.SOURCE)
         database.execute_script(script)
+        print(f"Wrote set of {len(self.entries)} entries to DB successfully")
 
     def cleanup_unwanted(self):   
         database = sql_helper.SqlDB()
