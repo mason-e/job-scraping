@@ -42,6 +42,11 @@ class JobBase(Parent):
         results = self.browser.find_elements(By.XPATH, self.RESULT_XPATH)
         for result in results:
             title = self.get_text_with_validation(result, self.TITLE_XPATH)
+            # hacky fix for LinkedIn unwanted duplication and verification tag
+            if self.TITLE_XPATH == ".//div[contains(@class, 'lockup__title')]":
+                title = title.replace("with verification", "")
+                title_length = len(title) // 2
+                title = title[:title_length]
             company = self.get_text_with_validation(result, self.COMPANY_XPATH)
             location = self.get_text_with_validation(result, self.LOCATION_XPATH)
             link = self.get_link_with_validation(result, self.LINK_XPATH)
