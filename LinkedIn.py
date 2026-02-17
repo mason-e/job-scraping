@@ -9,7 +9,10 @@ class LinkedIn(Parent):
     LOCATION_XPATH = ".//div[contains(@class, 'lockup__caption')]"
     NEXT_XPATH = "//button[contains(@class, 'button--next')]"
     LINK_XPATH = ".//a[contains(@class, 'container__link')]"
+    # URL for including remote
     URL = "https://www.linkedin.com/jobs/search/?f_TPR=r86400&geoId=90000034&keywords=Software%20Engineer&location=Denver%20Metropolitan%20Area"
+    # URL for local only
+    # URL = "https://www.linkedin.com/jobs/search/?currentJobId=4368409618&f_TPR=r86400&f_WT=1%2C3&geoId=90000034&keywords=Software%20Engineer&location=Denver%20Metropolitan%20Area"
     SOURCE = "LinkedIn"
     AUTH_URL = "https://www.linkedin.com/login"
     AUTH_USER = os.getenv('LinkedInUser')

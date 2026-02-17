@@ -9,7 +9,10 @@ class BuiltIn(Parent):
     # below is fragile, but works; get the text that's a "cousin" of the location pin image
     LOCATION_XPATH = ".//i[contains(@class, 'fa-location-dot')]/../following-sibling::div/span"
     NEXT_XPATH = "//i[contains(@class, 'fa-chevron-right')]//parent::a"
+    # URL for including remote
     URL = "https://www.builtincolorado.com/jobs/remote/hybrid/office/dev-engineering?search=software+engineer&daysSinceUpdated=1&state=Colorado&country=USA&allLocations=true"
+    # URL for local only
+    # URL = "https://www.builtincolorado.com/jobs/hybrid/office/engineering?search=software+engineer&daysSinceUpdated=1&state=Colorado&country=USA&allLocations=true"
     SOURCE = "BuiltInColorado"
 
 
