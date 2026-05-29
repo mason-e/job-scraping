@@ -12,13 +12,19 @@ Known working version is Python 3.12, but likely compatible with others.
 
 1. Download from python.org
 2. Create venv from repo root directory: `python -m venv venv`
-3. `pip install selenium` and `pip install pyodbc` for needed dependencies
+3. Activate the venv: `venv\Scripts\activate`
+4. Install dependencies into the venv:
+    - `python -m pip install selenium`
+    - `python -m pip install pyodbc`
 
 #### Linux
 
 1. `apt install python3.12-venv`
-2. `apt install python3-pip` (not sure if this is actually necessary since next steps do not use `pip` on Linux)
-3. `apt install python3-selenium` and `apt install ptyhon3-pyodbc`
+2. Create venv from repo root directory: `python3 -m venv venv`
+3. Activate the venv: `source venv/bin/activate`
+4. Install dependencies into the venv:
+    - `python3 -m pip install selenium`
+    - `python3 -m pip install pyodbc`
 
 ### Selenium
 
