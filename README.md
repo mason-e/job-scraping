@@ -1,5 +1,7 @@
 # Job Scrapers
 
+ARCHIVED - Replaced this with a [Playwright-based scraper](https://github.com/mason-e/playwright-scraping).
+
 This repository uses the Selenium Chrome web driver in Python to scrape job boards. The listings found are written to a SQL database. The advantage of this is to remove duplicates and block list matches so they can be aggregated for quick review.
 
 ## Setup
